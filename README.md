@@ -5,7 +5,7 @@
 
 # Create Pipeline
 
-    oc apply -f https://raw.githubusercontent.com/rajeshd2090/Openshift-/master/build-config.yaml
+    oc apply -f https://raw.githubusercontent.com/rajeshd2090/Openshift-/master/build-config.yaml -n=<Project-Name>
    
 # Start Pipeline
     oc start-build <Pipeline-Name>
