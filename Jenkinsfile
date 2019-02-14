@@ -1,5 +1,5 @@
 def checout(){
-      checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'e35ac079-efc0-4391-8d43-9d4c95371ae3', url: "${GIT_URL}"]]])
+      checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: "${GIT_URL}"]]])
 }
 pipeline {
     agent any
