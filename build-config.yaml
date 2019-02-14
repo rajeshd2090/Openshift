@@ -2,6 +2,7 @@ kind: "BuildConfig"
 apiVersion: "v1"
 metadata:
   name: "sample-pipeline"
+namespace: demo-devops
 spec:
   source:
     git:
