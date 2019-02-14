@@ -4,7 +4,7 @@ def checout(){
 pipeline {
     agent any
     environment {
-        GIT_URL='git@infygit.ad.infosys.com:lohit.jain'
+        GIT_URL='https://github.com/rajeshd2090/spring-boot-web-application'
     }
     tools{
         maven 'Maven_HOME'
