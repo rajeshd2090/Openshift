@@ -1,0 +1,11 @@
+kind: "BuildConfig"
+	apiVersion: "v1"
+	metadata:
+	  name: "sample-pipeline"
+	spec:
+	  source:
+		git:
+		  uri: "https://github.com/rajeshd2090/AllRef"
+	  strategy:
+		jenkinsPipelineStrategy:
+		  jenkinsfilePath: Jenkinsfile
