@@ -5,7 +5,7 @@ metadata:
 spec:
   source:
     git:
-      uri: "https://github.com/rajeshd2090/AllRef"
+      uri: "https://github.com/rajeshd2090/Openshift-"
   strategy:
     jenkinsPipelineStrategy:
       jenkinsfilePath: Jenkinsfile
