@@ -1,0 +1,24 @@
+jenkins:
+  systemMessage: "This is OpenShift Custom Jenkins Instance  \n\n"
+tool:
+  git:
+    installations:
+    - home: "git"
+      name: "Default"
+  maven:
+    installations:
+    - name: "Maven_HOME"
+      properties:
+      - installSource:
+          installers:
+            - maven:
+                id: "3.6.0" 
+  jdk:
+    defaultProperties:
+    - installSource:
+        installers:
+        - jdkInstaller:
+            acceptLicense: false
+    installations:
+    - home: "/usr/lib/jvm/java-1.8.0"
+      name: "JAVA_HOME"
