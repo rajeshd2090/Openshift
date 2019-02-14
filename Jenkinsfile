@@ -1,153 +1,56 @@
-def yamlFile()
-
-{
-
-    echo 'start'
-
-    def datas = readYaml file: '/var/lib/jenkins/jobs/YAML/workspace/propertyFile.yml'
-
-    env.microservice = datas.microservice
-
-    env.devproject = datas.devproject
-
-    env.cicdproject = datas.cicdproject
-
-    env.templatePath = datas.templatePath
-
-    env.sonarTemplate = datas.sonarTemplate
-
+def checout(){
+      checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'e35ac079-efc0-4391-8d43-9d4c95371ae3', url: "${GIT_URL}"]]])
 }
-
-def return1(name) 
-
-{
-
-    echo name
-
-    openshift.withCluster() {
-
-    openshift.withProject("${devproject}") {
-
-    return openshift.selector('dc',"${microservice}").exists()
-
+pipeline {
+    agent any
+    environment {
+        GIT_URL='git@infygit.ad.infosys.com:lohit.jain'
     }
-
-
-
-}
-
-}
-
-def checout()
-
-{
-
-    checkout([$class: 'GitSCM', branches: [[name: '*/stable-ocp-3.10']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/lohitj/coolstore-microservice.git']]])
-
-}
-
-
-
-def BuildDecide(update)
-
-{
-
-    if(!update) {
-
-        openshift.withCluster() {
-
-	openshift.verbose()
-
-        openshift.withProject("${devproject}") {
-
-        openshift.newApp("${templatePath}") 
-
+    tools{
+        maven 'Maven_HOME'
+        jdk   'JAVA_HOME'
+    }
+ stages {
+        stage ('testconvert - Checkout') {
+            steps{
+                
+                checout()
+            }
+ 	  
         }
-
-    }
-
-	BuildDecideSonar()
-
-    }
-
-    else  
-
-    {
-
-	    openshift.withCluster() {
-
-	    openshift.withProject("${devproject}") {
-
-        openshift.startBuild("${microservice}")
-
-        }           	  
-
-	    }
-
-    }
-
-}
-
-def BuildDecideSonar()
-
-{
-
-    openshift.withCluster() {
-
-	openshift.verbose()
-
-    openshift.withProject("${cicdproject}") {
-
-    openshift.newApp("${sonarTemplate}") 
-
+        stage('Test') {
+            steps {
+                bat 'mvn test'
+                junit '**/target/surefire-reports/*.xml'
+            }
         }
-
-    }
-
+        stage('Packaging') {
+            steps {
+                bat 'mvn war:war' 
+            }
+        }
+        stage('Deploy') {
+            steps {
+                bat 'mvn deploy' 
+            }
+        }
+        
 }
-
-node 
-
-{
-
-   
-
-   
-
-   def MAVEN_HOME = tool "Maven_HOME"
-
-   def JAVA_HOME = tool "JAVA_HOME"
-
-   env.PATH="${env.PATH}:${MAVEN_HOME}/bin:${JAVA_HOME}/bin"
-
-    stage('Build')
-
-   {
-
-       checout()
-
-       yamlFile()
-
-       sh 'mvn -f cart-service/pom.xml clean compile'
-
-   }
-
-   stage('check')
-
-   {
-
-       BuildDecide(return1("${microservice}"))
-
-   }
-
-   stage('test')
-
-   {
-
-        sh 'mvn -f cart-service/pom.xml test'
-
-   }
-
-  
-
+post {
+        always {
+            echo "I AM ALWAYS first"
+        }
+        aborted {
+            echo "BUILD ABORTED"
+        }
+        success {
+            echo "BUILD SUCCESS"
+        }
+        unstable {
+            echo "BUILD UNSTABLE"
+        }
+        failure {
+            echo "BUILD FAILURE"
+        }
+    }
 }
