@@ -1,11 +1,7 @@
 # Openshift-
 
 # Install Jenkins:
-    oc new-app --template=openshift/jenkins-persistent -e INSTALL_PLUGINS=configuration-as-code,configuration-as-code-support,
-    
-    matrix-auth:2.3 CASC_JENKINS_CONFIG=https://raw.githubusercontent.com/rajeshd2090/Openshift-/master/Jenkins.yaml 
-    
-    -n <Project-Name>
+    oc new-app --template=openshift/jenkins-persistent -e INSTALL_PLUGINS=configuration-as-code,configuration-as-code-support,matrix-auth:2.3 CASC_JENKINS_CONFIG=https://raw.githubusercontent.com/rajeshd2090/Openshift-/master/Jenkins.yaml -n <Project-Name>
 
 # Create Pipeline
 
