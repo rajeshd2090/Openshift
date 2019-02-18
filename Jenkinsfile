@@ -1,6 +1,6 @@
 pipeline {
   agent {
-      label 'Maven_HOME'
+      any
   }
   stages {
     stage('Build App') {
