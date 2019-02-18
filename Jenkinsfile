@@ -14,7 +14,7 @@ node {
                     def bcSelector = openshift.selector( "bc", "${REPO_NAME}")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
-                        openshift.newApp("redhat-openjdk18-openshift:1.1~${GIT_URL}","--strategy=source", "--wait")
+                        openshift.newBuild("redhat-openjdk18-openshift:1.1~${GIT_URL}","--strategy=source", "--wait")
 			    
                     } else {
 			//openshift.create([ kind : "RoleBinding", metadata: [name:"default_edittt"], roleRef: [name: "edit"], subjects:[kind: "ServiceAccount",name: "defaultxyz"] ]) 
