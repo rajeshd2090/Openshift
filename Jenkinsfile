@@ -1,56 +1,48 @@
-def checout(){
-      checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: "${GIT_URL}"]]])
-}
-pipeline {
-    agent any
-    environment {
-        GIT_URL='https://github.com/abhinav-goyall/os-mul-test-dum/tree/master/sales-service'
+node {
+	def MAVEN_HOME = tool "Maven_HOME"
+    def JAVA_HOME = tool "JAVA_HOME"
+    env.PATH="${env.PATH}:${MAVEN_HOME}/bin:${JAVA_HOME}/bin"
+    
+    def GIT_URL='https://github.com/sourabhgupta385/starwars'
+	def OS_PROJECT_NAME='coolstore-ui-cicd'
+	def REPO_NAME='starwars'
+    
+    stage('First Time Deployment'){
+        script{
+            openshift.withCluster() {
+                openshift.withProject("${OS_PROJECT_NAME}") {
+                    def bcSelector = openshift.selector( "bc", "${REPO_NAME}")
+                    def bcExists = bcSelector.exists()
+                    if (!bcExists) {
+                        openshift.newApp("redhat-openjdk18-openshift:1.1~${GIT_URL}","--strategy=source")
+			    
+                    } else {
+			//openshift.create([ kind : "RoleBinding", metadata: [name:"default_edittt"], roleRef: [name: "edit"], subjects:[kind: "ServiceAccount",name: "defaultxyz"] ]) 
+                        sh 'echo build config already exists'  
+                    } 
+                }
+            }
+        }
     }
-    tools{
-        maven 'Maven_HOME'
-        jdk   'JAVA_HOME'
+    
+	stage ('Checkout') {
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[ url: "${GIT_URL}"]]])
     }
- stages {
-        stage ('testconvert - Checkout') {
-            steps{
-                
-                checout()
-            }
- 	  
-        }
-        stage('Test') {
-            steps {
-                bat 'mvn test'
-                junit '**/target/surefire-reports/*.xml'
-            }
-        }
-        stage('Packaging') {
-            steps {
-                bat 'mvn war:war' 
+    
+	stage('Packaging') {   
+        sh 'mvn -DskipTests package'     
+    }
+    
+	stage("Dev - Building Application"){
+        script{
+            openshift.withCluster() {
+                openshift.withProject("${OS_PROJECT_NAME}"){
+                    openshift.startBuild("${REPO_NAME}")
+		  
+                }
             }
         }
-        stage('Deploy') {
-            steps {
-                bat 'mvn deploy' 
-            }
-        }
+	}
+   
         
-}
-post {
-        always {
-            echo "I AM ALWAYS first"
-        }
-        aborted {
-            echo "BUILD ABORTED"
-        }
-        success {
-            echo "BUILD SUCCESS"
-        }
-        unstable {
-            echo "BUILD UNSTABLE"
-        }
-        failure {
-            echo "BUILD FAILURE"
-        }
-    }
 }
