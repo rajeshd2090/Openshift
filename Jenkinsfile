@@ -33,16 +33,40 @@ node {
         sh 'mvn -DskipTests package'     
     }
     
-	stage("Dev - Building Application"){
+    stage("Building Image"){
         script{
             openshift.withCluster() {
                 openshift.withProject("${OS_PROJECT_NAME}"){
-                    openshift.startBuild("${REPO_NAME}","--wait").narrow('svc').expose()
+                    openshift.startBuild("${REPO_NAME}","--wait")
 		
                 }
             }
         }
 	}
-   
+   stage('Promote to DEV') {
+      steps {
+        script {
+          openshift.withCluster() {
+            openshift.tag("${REPO_NAME}:latest", "${REPO_NAME}:dev")
+          }
+        }
+      }
+    }
+    stage('Create DEV') {
+      when {
+        expression {
+          openshift.withCluster() {
+		  return !openshift.selector('dc', '${OS_PROJECT_NAME}-dev').exists()
+          }
+        }
+      }
+      steps {
+        script {
+          openshift.withCluster() {
+		  openshift.newApp("${REPO_NAME}:latest", "--name=${OS_PROJECT_NAME}-dev").narrow('svc').expose()
+          }
+        }
+      }
+    }
         
 }
