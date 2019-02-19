@@ -8,7 +8,12 @@ node {
 	def REPO_NAME='starwars'
    
 	stage('Initilize'){
-		sh 'oc new-project $OS_PROJECT_NAME';	
+		script{
+            openshift.withCluster() {
+                openshift.newProject("${OS_PROJECT_NAME}") {
+		}
+	    }
+	}
 	}
     
     stage('First Time Deployment'){
