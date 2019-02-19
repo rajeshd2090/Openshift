@@ -10,7 +10,7 @@ node {
 	stage('Initilize'){
 		script{
             openshift.withCluster() {
-                openshift.newProject("${OS_PROJECT_NAME}")
+               sh 'oc new-project test' 
 	    }
 	}
 	}
