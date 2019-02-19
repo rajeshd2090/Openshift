@@ -40,7 +40,7 @@ node {
 	            }
             }
          }
-	}
+	
    stage('Promote to DEV') {      
         script {
           openshift.withCluster() {
