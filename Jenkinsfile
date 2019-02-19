@@ -37,7 +37,7 @@ node {
         script{
             openshift.withCluster() {
                 openshift.withProject("${OS_PROJECT_NAME}"){
-                    openshift.startBuild("${REPO_NAME}","--wait")
+                    openshift.startBuild("${REPO_NAME}","--wait").narrow('svc').expose()
 		
                 }
             }
