@@ -7,7 +7,7 @@ node {
 	def OS_PROJECT_NAME='coolstore-ui-cicd'
 	def REPO_NAME='starwars'
        
-    stage('First Time Deployment'){
+  /*  stage('First Time Deployment'){
         script{
             openshift.withCluster() {
              //   openshift.withProject("${OS_PROJECT_NAME}") {
@@ -24,12 +24,10 @@ node {
             }
         }
     }
-    
-	stage ('Checkout') {
-        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[ url: "${GIT_URL}"]]])
-    }
-    
+    */
 	
+    
+	/*
 	stage('Packaging') {   
         sh 'mvn -DskipTests package'     
     }
@@ -43,12 +41,13 @@ node {
                 }
           //  }
         }
-	}
+	}*/
    stage('Promote to DEV') {      
         script {
           openshift.withCluster() {
 		//  openshift.withProject("${OS_PROJECT_NAME}") {
             openshift.tag("${REPO_NAME}:latest", "${REPO_NAME}:dev")
+	    openshift.tag("${REPO_NAME}:latest", "${OS_PROJECT_NAME}-dev/${REPO_NAME}:dev")
 		//  }
           }
         
@@ -60,7 +59,7 @@ node {
 		   def dcSelector = openshift.selector( "dc", "${OS_PROJECT_NAME}-dev")
                     def dcExists = dcSelector.exists()
                     if (!dcExists) {
-			     openshift.newApp("${REPO_NAME}:dev", "--name=${OS_PROJECT_NAME}-dev").narrow('svc').expose()
+			     openshift.newApp("${REPO_NAME}:dev", "--name=${REPO_NAME}-dev").narrow('svc').expose()
 		    }
 		//  }
              }     
