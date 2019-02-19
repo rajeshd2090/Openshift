@@ -1,5 +1,6 @@
 node {
-	def MAVEN_HOME = tool "Maven_HOME"
+    
+    def MAVEN_HOME = tool "Maven_HOME"
     def JAVA_HOME = tool "JAVA_HOME"
     env.PATH="${env.PATH}:${MAVEN_HOME}/bin:${JAVA_HOME}/bin"
     
@@ -7,10 +8,9 @@ node {
 	def OS_PROJECT_NAME='coolstore-ui-cicd'
 	def REPO_NAME='starwars'
        
-  /*  stage('First Time Deployment'){
+    stage('Create Image Builder'){
         script{
             openshift.withCluster() {
-             //   openshift.withProject("${OS_PROJECT_NAME}") {
                     def bcSelector = openshift.selector( "bc", "${REPO_NAME}")
                     def bcExists = bcSelector.exists()
                     if (!bcExists) {
@@ -20,37 +20,32 @@ node {
 			//openshift.create([ kind : "RoleBinding", metadata: [name:"default_edittt"], roleRef: [name: "edit"], subjects:[kind: "ServiceAccount",name: "defaultxyz"] ]) 
                         sh 'echo build config already exists'  
                     } 
-              //  }
+                }
             }
         }
     }
-    */
-	
     
-	/*
-	stage('Packaging') {   
+    stage ('Checkout') {
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[ url: "${GIT_URL}"]]])
+    }    
+	
+    stage('Packaging') {   
         sh 'mvn -DskipTests package'     
     }
     
     stage("Building Image"){
         script{
             openshift.withCluster() {
-         //       openshift.withProject("${OS_PROJECT_NAME}"){
-                    openshift.startBuild("${REPO_NAME}","--wait")
-		
-                }
-          //  }
-        }
-	}*/
+                      openshift.startBuild("${REPO_NAME}","--wait")
+	            }
+            }
+         }
+	}
    stage('Promote to DEV') {      
         script {
           openshift.withCluster() {
-		//  openshift.withProject("${OS_PROJECT_NAME}") {
-            openshift.tag("${REPO_NAME}:latest", "${REPO_NAME}:dev")
-	    openshift.tag("${REPO_NAME}:latest", "${OS_PROJECT_NAME}-dev/${REPO_NAME}:dev")
-		//  }
-          }
-        
+		   openshift.tag("${REPO_NAME}:latest", "${OS_PROJECT_NAME}-dev/${REPO_NAME}:dev")
+		}        
       }
     }
     stage('Create DEV') {
