@@ -58,14 +58,18 @@ node {
       when {
         expression {
           openshift.withCluster() {
+		  openshift.withProject("${OS_PROJECT_NAME}") {
 		  return !openshift.selector('dc', '${OS_PROJECT_NAME}-dev').exists()
+		  }
           }
         }
       }
       steps {
         script {
           openshift.withCluster() {
+		  openshift.withProject("${OS_PROJECT_NAME}") {
 		  openshift.newApp("${REPO_NAME}:latest", "--name=${OS_PROJECT_NAME}-dev").narrow('svc').expose()
+		  }
           }
         }
       }
