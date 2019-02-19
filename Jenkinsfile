@@ -6,6 +6,10 @@ node {
     def GIT_URL='https://github.com/sourabhgupta385/starwars'
 	def OS_PROJECT_NAME='coolstore-ui-cicd'
 	def REPO_NAME='starwars'
+   
+	stage('Initilize'){
+		sh 'oc new-project $OS_PROJECT_NAME';	
+	}
     
     stage('First Time Deployment'){
         script{
