@@ -47,7 +47,9 @@ node {
    stage('Promote to DEV') {      
         script {
           openshift.withCluster() {
+		  openshift.withProject("${OS_PROJECT_NAME}") {
             openshift.tag("${REPO_NAME}:latest", "${REPO_NAME}:dev")
+		  }
           }
         
       }
