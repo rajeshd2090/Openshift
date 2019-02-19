@@ -55,24 +55,15 @@ node {
       }
     }
     stage('Create DEV') {
-      when {
-        expression {
-          openshift.withCluster() {
+           openshift.withCluster() {
 		  openshift.withProject("${OS_PROJECT_NAME}") {
-		  return !openshift.selector('dc', '${OS_PROJECT_NAME}-dev').exists()
+		   def dcSelector = openshift.selector( "bc", "${OS_PROJECT_NAME}-dev")
+                    def dcExists = dcSelector.exists()
+                    if (!dcExists) {
+			     openshift.newApp("${REPO_NAME}:latest", "--name=${OS_PROJECT_NAME}-dev").narrow('svc').expose()
+		    }
 		  }
-          }
-        }
-      }
-      steps {
-        script {
-          openshift.withCluster() {
-		  openshift.withProject("${OS_PROJECT_NAME}") {
-		  openshift.newApp("${REPO_NAME}:latest", "--name=${OS_PROJECT_NAME}-dev").narrow('svc').expose()
-		  }
-          }
-        }
-      }
+             }     
     }
         
 }
