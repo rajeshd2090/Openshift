@@ -5,7 +5,7 @@ node {
     env.PATH="${env.PATH}:${MAVEN_HOME}/bin:${JAVA_HOME}/bin"
     
     def GIT_URL='https://github.com/sourabhgupta385/starwars'
-	def OS_PROJECT_NAME='coolstore-ui-cicd'
+	def OS_PROJECT_NAME='startwars-app'
 	def REPO_NAME='starwars'
        
     stage('Create Image Builder'){
