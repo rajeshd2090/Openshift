@@ -56,11 +56,11 @@ node {
     }
     stage('Create DEV') {
            openshift.withCluster() {
-		  openshift.withProject("${OS_PROJECT_NAME}") {
-		   def dcSelector = openshift.selector( "bc", "${OS_PROJECT_NAME}-dev")
+		  openshift.withProject("${OS_PROJECT_NAME}-dev") {
+		   def dcSelector = openshift.selector( "dc", "${OS_PROJECT_NAME}-dev")
                     def dcExists = dcSelector.exists()
                     if (!dcExists) {
-			     openshift.newApp("${REPO_NAME}:latest", "--name=${OS_PROJECT_NAME}-dev").narrow('svc').expose()
+			     openshift.newApp("${REPO_NAME}:dev", "--name=${OS_PROJECT_NAME}-dev").narrow('svc').expose()
 		    }
 		  }
              }     
