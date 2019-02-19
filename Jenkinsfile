@@ -6,15 +6,7 @@ node {
     def GIT_URL='https://github.com/sourabhgupta385/starwars'
 	def OS_PROJECT_NAME='coolstore-ui-cicd'
 	def REPO_NAME='starwars'
-   
-	stage('Initilize'){
-		script{
-            openshift.withCluster() {
-               sh 'oc new-project test' 
-	    }
-	}
-	}
-    
+       
     stage('First Time Deployment'){
         script{
             openshift.withCluster() {
