@@ -28,15 +28,17 @@ node {
     stage ('Checkout') {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[ url: "${GIT_URL}"]]])
     }    
+
+	stage('SonarQube analysis') {
+                sh 'mvn sonar:sonar -Dsonar.host.url=http://sonarqube-openshiftplus-dev.52.172.12.252.nip.io'
+            }
+        
 	
     stage('Packaging') {   
         sh 'mvn -DskipTests package'     
     }
 	
-    stage('SonarQube analysis 1') {
-                sh 'mvn sonar:sonar -Dsonar.host.url=http://sonarqube-openshiftplus-dev.52.172.12.252.nip.io'
-            }
-        
+    
     
     stage("Building Image"){
         script{
