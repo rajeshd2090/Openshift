@@ -32,6 +32,12 @@ node {
     stage('Packaging') {   
         sh 'mvn -DskipTests package'     
     }
+	
+    stage('SonarQube analysis 1') {
+            steps {
+                sh 'mvn clean package sonar:sonar'
+            }
+        
     
     stage("Building Image"){
         script{
