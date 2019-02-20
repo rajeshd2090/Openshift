@@ -6,7 +6,7 @@
     
 # DEV Project
  
-    oc new-projects <PROJECT-NAME>
+    oc new-projects <APP-NAME>-dev
     
     oc policy add-role-to-user edit system:serviceaccount:<PROJECT-NAME>:jenkins
     
