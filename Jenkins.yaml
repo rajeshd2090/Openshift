@@ -5,8 +5,8 @@ unclassified:
   sonarGlobalConfiguration:
     installations:
     - name: "SonarQube"
-      serverAuthenticationToken: "{AQAAABAAAAAwyqRL5Lx1rK94nJj7OlFqfIjojWc8/mP/zCZEY9kH2zWkhFx5O12Zt+loz1bWSVb6dUog0GGlWxMCm292TbvFSQ==}"
-      serverUrl: "sonar"
+      serverAuthenticationToken: "25231e90833f2b65d0c951423ca8b58b05cef204"
+      serverUrl: "http://sonarqube-openshiftplus-dev.52.172.12.252.nip.io"
       triggers:
         skipScmCause: false
         skipUpstreamCause: false
