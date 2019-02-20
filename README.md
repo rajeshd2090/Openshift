@@ -1,10 +1,10 @@
 # Openshift-
 
-# Build Project
+# Create Build Project
 
     oc new-projects <PROJECT-NAME>
     
-# DEV Project
+# Create DEV Project
  
     oc new-projects <APP-NAME>-dev
     
