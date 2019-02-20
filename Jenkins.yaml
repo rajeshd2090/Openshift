@@ -1,5 +1,15 @@
 jenkins:
   systemMessage: "This is OpenShift Custom Jenkins Instance  \n\n"
+  
+unclassified:
+  sonarGlobalConfiguration:
+    installations:
+    - name: "SonarQube"
+      serverAuthenticationToken: "{AQAAABAAAAAwyqRL5Lx1rK94nJj7OlFqfIjojWc8/mP/zCZEY9kH2zWkhFx5O12Zt+loz1bWSVb6dUog0GGlWxMCm292TbvFSQ==}"
+      serverUrl: "sonar"
+      triggers:
+        skipScmCause: false
+        skipUpstreamCause: false
 tool:
   git:
     installations:
@@ -22,3 +32,11 @@ tool:
     installations:
     - home: "/usr/lib/jvm/java-1.8.0"
       name: "JAVA_HOME"
+  sonarRunnerInstallation:
+    installations:
+    - name: "SONARQUBE_SCANNERR"
+      properties:
+      - installSource:
+          installers:
+          - sonarRunnerInstaller:
+              id: "3.3.0.1492"
