@@ -34,7 +34,7 @@ node {
     }
 	
     stage('SonarQube analysis 1') {
-                sh 'mvn clean package sonar:sonar'
+                sh 'mvn sonar:sonar -sonar.host.url=http://sonarqube-openshiftplus-dev.52.172.12.252.nip.io'
             }
         
     
