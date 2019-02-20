@@ -1,5 +1,16 @@
 # Openshift-
 
+# Build Project
+
+    oc new-projects <PROJECT-NAME>
+    
+# DEV Project
+ 
+    oc new-projects <PROJECT-NAME>
+    
+    oc policy add-role-to-user edit system:serviceaccount:<PROJECT-NAME>:jenkins
+    
+
 # Install Jenkins:
     oc new-app --template=openshift/jenkins-persistent -e INSTALL_PLUGINS=configuration-as-code,configuration-as-code-support,matrix-auth:2.3,sonar,nodejs CASC_JENKINS_CONFIG=https://raw.githubusercontent.com/rajeshd2090/Openshift/master/Jenkins.yaml -n=<Project-Name>
     
